@@ -1,4 +1,4 @@
-# GIREESH — Portfolio 2026
+# GIRIDHARAN S — Portfolio 2026
 
 A portfolio built as a piece of paper rather than as a page: one continuous
 sheet of warm graph stock, with a black sheet torn across it and everything
