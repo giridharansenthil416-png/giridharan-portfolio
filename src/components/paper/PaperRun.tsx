@@ -29,13 +29,14 @@ export default function PaperRun({ children }: { children: React.ReactNode }) {
   usePointerVector()
 
   return (
-    <div className="relative overflow-x-clip">
-      {/* Oversized, so the drift never exposes an edge. */}
+    <div className="relative overflow-x-hidden">
+      {/* Oversized, so the drift never exposes an edge.
+          willChange is only applied on devices with a fine pointer
+          (mouse/trackpad) where the parallax actually runs. */}
       <div
-        className="absolute inset-x-[-2.5%] inset-y-0 -z-10"
+        className="paper-parallax-layer absolute inset-x-[-2.5%] inset-y-0 -z-10"
         style={{
           transform: 'translate3d(calc(var(--px, 0) * 7px), calc(var(--py, 0) * 5px), 0)',
-          willChange: 'transform',
         }}
       >
         <Sheet

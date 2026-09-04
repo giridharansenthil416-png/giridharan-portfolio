@@ -103,9 +103,12 @@
 
 @layer base {
   html {
-    overflow-x: clip;
+    /* overflow-x: hidden is more compatible than clip on older Safari/iOS */
+    overflow-x: hidden;
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    /* Prevent horizontal drag exposing empty space on mobile */
+    max-width: 100vw;
   }
 
   body {
@@ -115,7 +118,10 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    overscroll-behavior-y: none;
+    /* Do NOT set overscroll-behavior-y: none here — it fights iOS momentum
+       scroll and is the second most common cause of "stuck" mobile scroll.
+       Lenis handles overscroll on desktop; native handles it on mobile. */
+    overflow-x: hidden;
   }
 
   ::selection {
@@ -146,8 +152,9 @@
     isolation: isolate;
     /* The texture layers are deliberately oversized (the grid is scaled, the
        fibre is inset -4%) so their motion never exposes an edge. A sheet
-       clips its own texture, or those few percent become page-wide overflow. */
-    overflow: clip;
+       clips its own texture, or those few percent become page-wide overflow.
+       Using hidden instead of clip for wider mobile browser compatibility. */
+    overflow: hidden;
     background-color: var(--color-paper);
   }
 
@@ -156,6 +163,18 @@
     inset: 0;
     pointer-events: none;
     z-index: 0;
+  }
+
+  /* The parallax paper layer behind the whole page. willChange is only
+     set on fine-pointer devices (mouse/trackpad) where the parallax actually
+     runs — avoids burning extra GPU layers on mobile. */
+  .paper-parallax-layer {
+    /* No willChange by default (mobile). */
+  }
+  @media (pointer: fine) {
+    .paper-parallax-layer {
+      will-change: transform;
+    }
   }
 
   .paper-grid {
@@ -180,8 +199,24 @@
   .paper-fibre {
     inset: -4%;
     mix-blend-mode: multiply;
-    will-change: transform;
     animation: fibre-drift 46s var(--ease-breath, cubic-bezier(0.45, 0, 0.55, 1)) infinite;
+  }
+  /* Only promote to GPU layer on pointer:fine (desktop) — costs memory on mobile */
+  @media (pointer: fine) {
+    .paper-fibre {
+      will-change: transform;
+    }
+  }
+
+  /* Hero lock-up parallax layer: only needs willChange on desktop (fine pointer)
+     where the pointer parallax actually runs. On mobile, --px/--py stay 0. */
+  .hero-lockup-layer {
+    /* No will-change on mobile. */
+  }
+  @media (pointer: fine) {
+    .hero-lockup-layer {
+      will-change: transform;
+    }
   }
 
 
@@ -273,16 +308,21 @@
   /* ===========================================================================
      LENIS
      =========================================================================== */
+  /* Lenis requires height: auto on <html> and <body> to measure scroll correctly.
+     IMPORTANT: do NOT set overflow: hidden on html.lenis — it breaks iOS scroll. */
   html.lenis,
   html.lenis body {
     height: auto;
   }
+  /* Override any native smooth-scroll while Lenis is active (avoids double-smoothing). */
   .lenis.lenis-smooth {
     scroll-behavior: auto !important;
   }
+  /* Scrollable inner elements (e.g. code blocks, modals) stay independent. */
   .lenis.lenis-smooth [data-lenis-prevent] {
     overscroll-behavior: contain;
   }
+  /* Only prevent scroll when Lenis explicitly stops it (e.g. during modals). */
   .lenis.lenis-stopped {
     overflow: hidden;
   }
@@ -733,6 +773,8 @@
     width: max-content;
     will-change: transform;
     animation: marquee-drift var(--marquee-duration, 22s) linear infinite;
+    /* Prevent horizontal touch swipe on the marquee from blocking vertical scroll */
+    touch-action: pan-y;
   }
 
   .breathing-portrait {

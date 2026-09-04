@@ -6,18 +6,27 @@ import Lenis from 'lenis'
 /**
  * Weighted scrolling. The whole conceit of the site is that you are handling
  * paper, and paper has mass — a native wheel jump undoes that in one gesture.
- * Off entirely under prefers-reduced-motion, where the native scroll is the
+ *
+ * Disabled entirely on touch-only devices (phones / tablets): native momentum
+ * scrolling is faster and more reliable there, and Lenis intercepting touch
+ * events is the primary cause of the "stuck" feeling on mobile.
+ *
+ * Also off under prefers-reduced-motion, where the native scroll is the
  * correct behaviour rather than a compromise.
  */
 export default function SmoothScroll() {
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
+    // Touch-only devices (phones/tablets) scroll better natively.
+    // `pointer: fine` is a mouse or stylus — coarse means touchscreen.
+    const hasFinePonter = window.matchMedia('(pointer: fine)').matches
+    if (!hasFinePonter) return
+
     const lenis = new Lenis({
-      duration: 1.05,
-      easing: (x: number) => Math.min(1, 1.001 - Math.pow(2, -10 * x)),
+      lerp: 0.1,           // Smoother than duration+easing, prevents jank on wheel
       smoothWheel: true,
-      touchMultiplier: 1.6,
+      syncTouch: false,    // Let native touch scroll handle mobile
       autoRaf: false,
     })
 
@@ -43,7 +52,7 @@ export default function SmoothScroll() {
       const target = document.querySelector(hash)
       if (!target) return
       e.preventDefault()
-      lenis.scrollTo(target as HTMLElement, { duration: 1.6 })
+      lenis.scrollTo(target as HTMLElement, { lerp: 0.1, duration: 1.6 })
       history.pushState(null, '', hash)
     }
     document.addEventListener('click', onClick)
