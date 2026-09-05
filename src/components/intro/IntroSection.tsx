@@ -48,7 +48,7 @@ export default function IntroSection() {
   return (
     <section
       id="about"
-      className="relative w-full pb-0 pt-[clamp(3.5rem,10vh,8rem)]"
+      className="content-auto relative w-full pb-0 pt-[clamp(3.5rem,10vh,8rem)]"
       aria-label="About and Technical Stack"
     >
       <div className="relative z-10 px-[max(1.5rem,7vw)] pb-[clamp(2.5rem,6vh,4.5rem)]">
@@ -129,68 +129,32 @@ export default function IntroSection() {
             </div>
 
             {/* Education */}
-            <h3 className="section-head m-0 mt-[1.6em] text-ink">{site.education.heading}</h3>
-            <dl className="m-0 mt-[1em] flex flex-col gap-[1.15em]">
-              {site.education.items.map((edu) => (
-                <div key={edu.degree}>
-                  <div className="flex items-baseline justify-between gap-2">
-                    <dt className="body-copy m-0 font-bold leading-snug text-ink">{edu.degree}</dt>
-                    <span className="font-mono text-[0.75rem] font-bold text-signal">{edu.grade}</span>
-                  </div>
-                  {edu.specialization && (
-                    <p className="body-copy m-0 font-medium text-ink/80">{edu.specialization}</p>
-                  )}
-                  <dd className="body-copy m-0 mt-[0.2em] text-[0.88rem] leading-snug text-graphite">
-                    {edu.detail} {edu.period ? `• ${edu.period}` : ''}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </motion.div>
-
-          {/* -------------------------------------------------- SKILLS + INTERNSHIP */}
-          <motion.div className="area-aside" variants={item} custom={3}>
-            <div>
-              <h3 className="section-head m-0 mb-[0.75em] text-ink">{site.techStack.heading}</h3>
-              <SkillsGrid />
-            </div>
-
-            <div className="mt-[2em]">
-              <h3 className="section-head m-0 mb-[0.75em] text-ink">{site.experience.heading}</h3>
-              <div className="flex flex-col gap-[1.2em]">
-                {site.experience.items.map((exp) => (
-                  <div
-                    key={exp.role}
-                    className="rounded-[0.5rem] border border-ink/15 bg-paper/60 p-[0.9rem] backdrop-blur-[2px]"
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="eyebrow text-[0.68rem] text-signal">{exp.period}</span>
-                      {exp.badge && (
-                        <span className="rounded bg-ink px-1.5 py-0.5 font-mono text-[0.65rem] font-bold text-paper">
-                          {exp.badge}
-                        </span>
-                      )}
+            <div id="education" className="scroll-mt-24">
+              <h3 className="section-head m-0 mt-[1.6em] text-ink">{site.education.heading}</h3>
+              <dl className="m-0 mt-[1em] flex flex-col gap-[1.15em]">
+                {site.education.items.map((edu) => (
+                  <div key={edu.degree}>
+                    <div className="flex items-baseline justify-between gap-2">
+                      <dt className="body-copy m-0 font-bold leading-snug text-ink">{edu.degree}</dt>
+                      <span className="font-mono text-[0.75rem] font-bold text-signal">{edu.grade}</span>
                     </div>
-                    <p className="body-copy m-0 mt-[0.3em] font-bold leading-snug text-ink">{exp.company}</p>
-                    <p className="body-copy m-0 text-[0.88rem] font-medium leading-snug text-graphite">
-                      {exp.role}
-                    </p>
-                    <p className="body-copy m-0 mt-[0.5em] text-[0.82rem] leading-relaxed text-graphite">
-                      {exp.description}
-                    </p>
-                    <div className="mt-[0.6em] flex flex-wrap gap-1">
-                      {exp.tags.map((t) => (
-                        <span
-                          key={t}
-                          className="rounded-[2px] border border-ink/10 bg-white/70 px-1.5 py-0.5 font-mono text-[0.68rem] text-ink/80"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
+                    {edu.specialization && (
+                      <p className="body-copy m-0 font-medium text-ink/80">{edu.specialization}</p>
+                    )}
+                    <dd className="body-copy m-0 mt-[0.2em] text-[0.88rem] leading-snug text-graphite">
+                      {edu.detail} {edu.period ? `• ${edu.period}` : ''}
+                    </dd>
                   </div>
                 ))}
-              </div>
+              </dl>
+            </div>
+          </motion.div>
+
+          {/* -------------------------------------------------- SKILLS */}
+          <motion.div className="area-aside" variants={item} custom={3}>
+            <div id="skills" className="scroll-mt-24">
+              <h3 className="section-head m-0 mb-[0.75em] text-ink">{site.techStack.heading}</h3>
+              <SkillsGrid />
             </div>
           </motion.div>
         </motion.div>

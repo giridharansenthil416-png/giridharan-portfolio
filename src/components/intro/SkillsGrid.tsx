@@ -25,7 +25,7 @@ export default function SkillsGrid() {
       <motion.div
         variants={cardVariant}
         custom={0}
-        className="rounded-[0.5rem] border border-ink/20 bg-paper/80 p-[0.85rem] backdrop-blur-[4px] shadow-sm"
+        className="rounded-[0.5rem] border border-ink/20 bg-paper/90 md:bg-paper/80 p-[0.85rem] md:backdrop-blur-[4px] shadow-sm"
       >
         <p
           className="eyebrow m-0 mb-[0.65rem] font-bold text-ink"
@@ -67,7 +67,7 @@ export default function SkillsGrid() {
           key={cat.title}
           variants={cardVariant}
           custom={i + 1}
-          className="rounded-[0.4rem] border border-ink/15 bg-paper/60 p-[0.75rem] backdrop-blur-[2px] transition-colors duration-300 hover:border-ink/35"
+          className="rounded-[0.4rem] border border-ink/15 bg-paper/85 md:bg-paper/60 p-[0.75rem] md:backdrop-blur-[2px] transition-colors duration-300 hover:border-ink/35"
         >
           <p
             className="eyebrow m-0 mb-[0.45rem] font-bold text-ink"
@@ -75,11 +75,11 @@ export default function SkillsGrid() {
           >
             {cat.title}
           </p>
-          <div className="flex flex-wrap gap-[0.35rem]">
+          <div className="flex flex-wrap gap-1.5 sm:gap-[0.35rem]">
             {cat.skills.map((skill) => (
               <span
                 key={skill}
-                className="inline-block rounded-[3px] border border-ink/10 bg-white/80 px-[0.45rem] py-[0.15rem] font-mono text-[clamp(0.6875rem,0.85vw,0.75rem)] font-medium text-ink transition-transform duration-200 hover:-translate-y-[1px] hover:border-signal/40"
+                className="inline-block max-w-full break-words rounded-[3px] border border-ink/10 bg-white/85 px-2 py-1 sm:px-[0.45rem] sm:py-[0.15rem] font-mono text-[0.72rem] sm:text-[clamp(0.6875rem,0.85vw,0.75rem)] font-medium text-ink transition-transform duration-200 hover:-translate-y-[1px] hover:border-signal/40"
               >
                 {skill}
               </span>

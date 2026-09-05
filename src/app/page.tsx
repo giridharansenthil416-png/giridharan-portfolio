@@ -1,5 +1,6 @@
 import Hero from '@/components/hero/Hero'
 import IntroSection from '@/components/intro/IntroSection'
+import InternshipSection from '@/components/internships/InternshipSection'
 import ProjectsSection from '@/components/projects/ProjectsSection'
 import NameStrip from '@/components/name/NameStrip'
 import ActivitiesSection from '@/components/activities/ActivitiesSection'
@@ -16,6 +17,7 @@ export default function Page() {
         <PaperRun>
           <Hero />
           <IntroSection />
+          <InternshipSection />
           <ProjectsSection />
           <NameStrip />
           <ActivitiesSection />

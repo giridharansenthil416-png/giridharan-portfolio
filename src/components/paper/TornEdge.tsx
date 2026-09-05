@@ -66,11 +66,11 @@ export default function TornEdge({
         <filter id={fray} x="-4%" y="-40%" width="108%" height="180%" colorInterpolationFilters="sRGB">
           {/* Stretched frequency: fine across x, coarse across y, so the noise
               pulls the edge sideways into fibres instead of blurring it. */}
-          <feTurbulence type="fractalNoise" baseFrequency="0.028 0.6" numOctaves="4" seed={seed} result="n" />
-          <feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G" />
+          <feTurbulence type="fractalNoise" baseFrequency="0.028 0.6" numOctaves="2" seed={seed} result="n" />
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="6" xChannelSelector="R" yChannelSelector="G" />
         </filter>
         <filter id={blur} x="-4%" y="-40%" width="108%" height="180%">
-          <feGaussianBlur stdDeviation="5" />
+          <feGaussianBlur stdDeviation="4" />
         </filter>
       </defs>
 

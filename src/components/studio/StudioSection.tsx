@@ -71,7 +71,7 @@ export default function StudioSection() {
   return (
     <section
       id="studio"
-      className="relative w-full pt-[clamp(1rem,4vw,4rem)] pb-[clamp(4rem,11vw,9rem)]"
+      className="content-auto relative w-full pt-[clamp(1rem,4vw,4rem)] pb-[clamp(4rem,11vw,9rem)]"
       aria-label={site.studio.heading}
     >
       <motion.div

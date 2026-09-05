@@ -39,13 +39,22 @@ export default function StickerCutout({
   children,
 }: Props) {
   const ref = useRef<HTMLDivElement>(null)
-  const [radius, setRadius] = useState(10)
+  const [radius, setRadius] = useState(8)
+  const [isFine, setIsFine] = useState(true)
 
   useEffect(() => {
+    setIsFine(window.matchMedia('(pointer: fine)').matches)
     const el = ref.current
     if (!el) return
+
+    let lastW = 0
     const ro = new ResizeObserver(([entry]) => {
-      setRadius(Math.max(3, Math.round(entry.contentRect.width * ratio)))
+      const w = Math.round(entry.contentRect.width)
+      // Only update if width meaningfully changes (avoid re-renders during scroll / mobile address bar resizing)
+      if (Math.abs(w - lastW) > 16) {
+        lastW = w
+        setRadius(Math.max(3, Math.min(14, Math.round(w * ratio))))
+      }
     })
     ro.observe(el)
     return () => ro.disconnect()
@@ -57,23 +66,36 @@ export default function StickerCutout({
 
   return (
     <div ref={ref} className={`relative ${className}`}>
-      <svg width="0" height="0" className="absolute" aria-hidden="true" focusable="false">
-        <defs>
-          <filter id={id} x="-25%" y="-20%" width="150%" height="140%" colorInterpolationFilters="sRGB">
-            <feMorphology in="SourceAlpha" operator="dilate" radius={radius} result="spread" />
-            <feFlood floodColor={color} result="paint" />
-            <feComposite in="paint" in2="spread" operator="in" result="edge" />
-            <feMerge>
-              <feMergeNode in="edge" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-      </svg>
-
-      <div className="h-full w-full" style={{ filter: `url(#${id})` }}>
-        {children}
-      </div>
+      {isFine ? (
+        <>
+          <svg width="0" height="0" className="absolute" aria-hidden="true" focusable="false">
+            <defs>
+              <filter id={id} x="-25%" y="-20%" width="150%" height="140%" colorInterpolationFilters="sRGB">
+                <feMorphology in="SourceAlpha" operator="dilate" radius={radius} result="spread" />
+                <feFlood floodColor={color} result="paint" />
+                <feComposite in="paint" in2="spread" operator="in" result="edge" />
+                <feMerge>
+                  <feMergeNode in="edge" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+          </svg>
+          <div className="h-full w-full" style={{ filter: `url(#${id})` }}>
+            {children}
+          </div>
+        </>
+      ) : (
+        /* On mobile/touch, CSS drop-shadow outlines run purely on the GPU with zero SVG dilation convolution cost */
+        <div
+          className="h-full w-full"
+          style={{
+            filter: `drop-shadow(2px 0 0 ${color}) drop-shadow(-2px 0 0 ${color}) drop-shadow(0 2px 0 ${color}) drop-shadow(0 -2px 0 ${color}) drop-shadow(0 0 1px ${color})`,
+          }}
+        >
+          {children}
+        </div>
+      )}
     </div>
   )
 }

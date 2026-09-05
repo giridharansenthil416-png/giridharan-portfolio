@@ -84,20 +84,44 @@ export const site = {
     heading: 'TECHNICAL STACK',
     categories: [
       {
-        title: 'HDL & DIGITAL',
-        skills: ['Verilog', 'SystemVerilog (Learning)', 'RTL Design', 'Digital Electronics', 'Computer Architecture (Learning)'],
+        title: 'HDL & RTL DESIGN',
+        skills: ['Verilog', 'SystemVerilog (Learning)', 'RTL Design', 'Digital Logic Design', 'FSM Design', 'Microarchitecture'],
       },
       {
-        title: 'VLSI & PHYSICAL DESIGN',
-        skills: ['Synthesis', 'Physical Design (Intermediate)', 'DFT (Learning)', 'STA (Learning)', 'Design Verification (Learning)'],
+        title: 'COMPUTER ARCHITECTURE',
+        skills: ['8-Bit CPU Architecture', 'ALU Implementation', 'Pipelining Concepts', 'RISC-V Fundamentals', 'Instruction Set Architecture (ISA)'],
       },
       {
-        title: 'EDA TOOLS',
-        skills: ['Synopsys Fusion Compiler', 'Cadence', 'Vivado', 'Microwind', 'Tessent (Learning)'],
+        title: 'FPGA DESIGN',
+        skills: ['AMD / Xilinx Vivado', 'FPGA Synthesis', 'RTL to Bitstream', 'FPGA Prototyping', 'Timing Constraints (XDC)'],
       },
       {
-        title: 'WORKFLOW & PROGRAMMING',
-        skills: ['VCS', 'Verdi', 'SDC Constraints', 'Linux', 'VS Code', 'Python'],
+        title: 'ASIC VERIFICATION',
+        skills: ['SystemVerilog Testbenches', 'VCS Simulation', 'Verdi Debug', 'Functional Verification', 'Coverage Analysis'],
+      },
+      {
+        title: 'PHYSICAL DESIGN',
+        skills: ['Synopsys Fusion Compiler', 'Synthesis', 'Floorplanning & Placement', 'Clock Tree Synthesis (CTS)', 'Routing & Optimization', 'STA (Learning)', 'DFT (Learning)'],
+      },
+      {
+        title: 'EDA TOOLS – SYNOPSYS',
+        skills: ['Fusion Compiler', 'Design Compiler', 'VCS Simulator', 'Verdi Debugger', 'PrimeTime (Concepts)'],
+      },
+      {
+        title: 'EDA TOOLS – CADENCE & OPEN SOURCE',
+        skills: ['Cadence EDA', 'Microwind', 'Tessent (Learning)', 'Yosys', 'OpenROAD', 'OASIS / GDSII Layout'],
+      },
+      {
+        title: 'AI & ML HARDWARE',
+        skills: ['Hardware Accelerators', 'MAC Units', 'Fixed-Point Arithmetic', 'Neural Network Hardware Concepts'],
+      },
+      {
+        title: 'EMBEDDED SYSTEMS & IOT',
+        skills: ['Microcontroller Interfacing', 'UART / SPI / I2C', 'Hardware-Software Integration', 'Digital Electronics'],
+      },
+      {
+        title: 'PROGRAMMING LANGUAGES & SCRIPTING',
+        skills: ['Python', 'C / C++', 'SDC Constraints', 'TCL Scripting', 'Linux / Bash', 'VS Code', 'Git / GitHub'],
       },
     ],
   },
@@ -161,13 +185,19 @@ export const site = {
     heading: 'INTERNSHIP EXPERIENCE',
     items: [
       {
+        num: '01',
         period: 'Virtual Internship',
         role: 'Python & Programming Track',
         company: 'Infosys Springboard',
         badge: 'PYTHON',
+        duration: 'Virtual Practicum',
+        mode: 'Virtual / Online',
+        status: 'Completed & Verified',
         description:
           'Completed a virtual internship through Infosys Springboard with a focus on Python and programming-oriented learning.',
         tags: ['Python', 'Programming', 'Virtual Internship', 'Infosys Springboard'],
+        certificateUrl: 'https://springboard.infosys.com',
+        learnMoreUrl: 'https://springboard.infosys.com',
       },
     ],
   },

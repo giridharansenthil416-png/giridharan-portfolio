@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { site } from '@/config/site'
 import { assets } from '@/config/assets'
@@ -18,29 +18,52 @@ import { usePrefersReducedMotion } from '@/lib/hooks'
  * 560px at most, no backdrop, no blur, one shadow doing the job of lifting it
  * a few millimetres off the paper. Dismissible by button or Escape, and it
  * stays dismissed.
+ *
+ * Visibility is driven by TWO IntersectionObservers on sentinel <span>s placed
+ * at the enter and exit scroll thresholds — NOT by a scroll event listener.
+ * This means React state only updates at the two boundary crossings (card
+ * appears / card disappears), never on every scroll frame. Zero RAF loops,
+ * zero scroll handlers, zero mid-scroll renders.
  */
 export default function ConnectCard() {
   const reduced = usePrefersReducedMotion()
   const [visible, setVisible] = useState(false)
   const [dismissed, setDismissed] = useState(false)
+  const enterRef = useRef<HTMLSpanElement>(null)
+  const exitRef  = useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
-    let frame = 0
-    const read = () => {
-      frame = 0
-      const y = window.scrollY
-      setVisible(y > 80 && y < window.innerHeight * 1.45)
+    const enter = enterRef.current
+    const exit  = exitRef.current
+    if (!enter || !exit) return
+
+    let pastTop = false
+    let pastBottom = false
+
+    const update = () => {
+      setVisible(pastTop && !pastBottom)
     }
-    const onScroll = () => {
-      if (!frame) frame = requestAnimationFrame(read)
-    }
-    read()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll, { passive: true })
+
+    const ioEnter = new IntersectionObserver(
+      ([e]) => {
+        pastTop = !e.isIntersecting
+        update()
+      },
+      { threshold: 0 }
+    )
+    const ioExit = new IntersectionObserver(
+      ([e]) => {
+        pastBottom = !e.isIntersecting
+        update()
+      },
+      { threshold: 0 }
+    )
+
+    ioEnter.observe(enter)
+    ioExit.observe(exit)
     return () => {
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
-      cancelAnimationFrame(frame)
+      ioEnter.disconnect()
+      ioExit.disconnect()
     }
   }, [])
 
@@ -57,7 +80,22 @@ export default function ConnectCard() {
   const shown = { opacity: 1, y: 0, scale: 1, x: '-50%' }
 
   return (
-    <AnimatePresence>
+    <>
+      {/* Sentinels for IntersectionObserver — zero-size, non-interactive.
+          enterRef spans the first 80px: when scrolled past 80px, it leaves the viewport.
+          exitRef spans the first 145vh: when scrolled past 145vh, it leaves the viewport.
+          Observers fire ONLY at these two boundary crossings, never during scrolling. */}
+      <span
+        ref={enterRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute left-0 top-0 h-[80px] w-px opacity-0"
+      />
+      <span
+        ref={exitRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute left-0 top-0 h-[145vh] w-px opacity-0"
+      />
+      <AnimatePresence>
       {open && (
         <motion.aside
           key="connect"
@@ -108,7 +146,8 @@ export default function ConnectCard() {
           </div>
         </motion.aside>
       )}
-    </AnimatePresence>
+      </AnimatePresence>
+    </>
   )
 }
 

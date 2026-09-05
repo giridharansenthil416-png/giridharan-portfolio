@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { site } from '@/config/site'
 import SmoothScroll from '@/components/ui/SmoothScroll'
 import Cursor from '@/components/ui/Cursor'
+import MobileNav from '@/components/ui/MobileNav'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <SmoothScroll />
         <Cursor />
+        <MobileNav />
         <a
           href="#intro"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-ink focus:px-4 focus:py-2 focus:text-paper"

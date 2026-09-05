@@ -27,15 +27,8 @@ export default function SmoothScroll() {
       lerp: 0.1,           // Smoother than duration+easing, prevents jank on wheel
       smoothWheel: true,
       syncTouch: false,    // Let native touch scroll handle mobile
-      autoRaf: false,
+      autoRaf: true,       // Efficient internal RAF loop that sleeps when settled
     })
-
-    let frame = 0
-    const loop = (time: number) => {
-      lenis.raf(time)
-      frame = requestAnimationFrame(loop)
-    }
-    frame = requestAnimationFrame(loop)
 
     /**
      * In-page links travel instead of jumping. A native hash navigation sets
@@ -59,7 +52,6 @@ export default function SmoothScroll() {
 
     return () => {
       document.removeEventListener('click', onClick)
-      cancelAnimationFrame(frame)
       lenis.destroy()
     }
   }, [])

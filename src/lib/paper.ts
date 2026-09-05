@@ -27,7 +27,7 @@ function url(svg: string) {
  * to fit — which means one sheet can run the height of the whole document at a
  * constant crease scale.
  */
-export function crumple(seed: number, frequency = 0.0055, octaves = 5) {
+export function crumple(seed: number, frequency = 0.0055, octaves = 3) {
   return url(`
     <svg xmlns='http://www.w3.org/2000/svg' width='1200' height='1200'>
       <filter id='c' x='0' y='0' width='100%' height='100%' color-interpolation-filters='sRGB'>
@@ -61,7 +61,7 @@ export function inkMask(seed: number) {
   return url(`
     <svg xmlns='http://www.w3.org/2000/svg' width='900' height='900'>
       <filter id='m' color-interpolation-filters='sRGB'>
-        <feTurbulence type='fractalNoise' baseFrequency='0.0042' numOctaves='3' seed='${seed}'/>
+        <feTurbulence type='fractalNoise' baseFrequency='0.0042' numOctaves='2' seed='${seed}'/>
         <feColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.8 0 0 0 0.42'/>
       </filter>
       <rect width='900' height='900' filter='url(#m)'/>
@@ -78,7 +78,7 @@ export function crumpleDark(seed: number, frequency = 0.013) {
   return url(`
     <svg xmlns='http://www.w3.org/2000/svg' width='1200' height='1200'>
       <filter id='d' x='0' y='0' width='100%' height='100%' color-interpolation-filters='sRGB'>
-        <feTurbulence type='fractalNoise' baseFrequency='${frequency}' numOctaves='5' seed='${seed}' stitchTiles='stitch' result='t'/>
+        <feTurbulence type='fractalNoise' baseFrequency='${frequency}' numOctaves='3' seed='${seed}' stitchTiles='stitch' result='t'/>
         <feDiffuseLighting in='t' lighting-color='#ffffff' surfaceScale='3' diffuseConstant='1' result='l'>
           <feDistantLight azimuth='232' elevation='58'/>
         </feDiffuseLighting>

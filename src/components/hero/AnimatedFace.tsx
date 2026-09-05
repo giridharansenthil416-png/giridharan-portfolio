@@ -33,14 +33,26 @@ const PAPER = '#f3f1eb'
 export default function AnimatedFace({ className = '' }: { className?: string }) {
   const reduced = usePrefersReducedMotion()
   const svgRef = useRef<SVGSVGElement>(null)
+  const [inView, setInView] = useState(true)
 
   const [blink, setBlink] = useState(false)
   const [smile, setSmile] = useState(false)
   const [dart, setDart] = useState({ x: 0, y: 0 })
 
+  /* ------------------------------------------- pause face rig when offscreen */
+  useEffect(() => {
+    const el = svgRef.current
+    if (!el) return
+    const io = new IntersectionObserver(([entry]) => {
+      setInView(entry.isIntersecting)
+    }, { rootMargin: '100px' })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
   /* ---------------------------------------------------------------- blink */
   useEffect(() => {
-    if (reduced) return
+    if (reduced || !inView) return
     const timers: ReturnType<typeof setTimeout>[] = []
 
     const shut = (then: () => void) => {
@@ -67,11 +79,11 @@ export default function AnimatedFace({ className = '' }: { className?: string })
 
     timers.push(setTimeout(() => shut(schedule), cue.firstBlink * 1000))
     return () => timers.forEach(clearTimeout)
-  }, [reduced])
+  }, [reduced, inView])
 
   /* ------------------------------------------------------------- eye dart */
   useEffect(() => {
-    if (reduced) return
+    if (reduced || !inView) return
     const timers: ReturnType<typeof setTimeout>[] = []
 
     const schedule = () => {
@@ -96,11 +108,11 @@ export default function AnimatedFace({ className = '' }: { className?: string })
 
     schedule()
     return () => timers.forEach(clearTimeout)
-  }, [reduced])
+  }, [reduced, inView])
 
   /* ---------------------------------------------------- occasional smile */
   useEffect(() => {
-    if (reduced) return
+    if (reduced || !inView) return
     const timers: ReturnType<typeof setTimeout>[] = []
     const schedule = () => {
       timers.push(
@@ -120,18 +132,21 @@ export default function AnimatedFace({ className = '' }: { className?: string })
     }
     schedule()
     return () => timers.forEach(clearTimeout)
-  }, [reduced])
+  }, [reduced, inView])
 
   /* ------------------------------------------------ iris tracks the cursor */
   useEffect(() => {
-    if (reduced) return
+    if (reduced || !inView) return
     const el = svgRef.current
     if (!el) return
     if (!window.matchMedia('(pointer: fine)').matches) return
 
-    let rect = el.getBoundingClientRect()
+    let rect: DOMRect | null = null
     const measure = () => {
-      rect = el.getBoundingClientRect()
+      if (el) rect = el.getBoundingClientRect()
+    }
+    const invalidate = () => {
+      rect = null
     }
 
     let tx = 0
@@ -154,8 +169,10 @@ export default function AnimatedFace({ className = '' }: { className?: string })
     }
 
     const onMove = (e: PointerEvent) => {
-      const fx = rect.left + rect.width / 2
-      const fy = rect.top + rect.height / 2
+      if (!rect) measure()
+      const r = rect!
+      const fx = r.left + r.width / 2
+      const fy = r.top + r.height / 2
       tx = Math.max(-1, Math.min(1, (e.clientX - fx) / (window.innerWidth * 0.34)))
       ty = Math.max(-1, Math.min(1, (e.clientY - fy) / (window.innerHeight * 0.42)))
       if (!running) {
@@ -165,15 +182,15 @@ export default function AnimatedFace({ className = '' }: { className?: string })
     }
 
     window.addEventListener('pointermove', onMove, { passive: true })
-    window.addEventListener('resize', measure)
-    window.addEventListener('scroll', measure, { passive: true })
+    window.addEventListener('resize', invalidate, { passive: true })
+    window.addEventListener('scroll', invalidate, { passive: true })
     return () => {
       window.removeEventListener('pointermove', onMove)
-      window.removeEventListener('resize', measure)
-      window.removeEventListener('scroll', measure)
+      window.removeEventListener('resize', invalidate)
+      window.removeEventListener('scroll', invalidate)
       cancelAnimationFrame(frame)
     }
-  }, [reduced])
+  }, [reduced, inView])
 
   /* ------------------------------------------------------------ rig values */
   const lidScale = blink ? 0.05 : smile ? 0.84 : 1

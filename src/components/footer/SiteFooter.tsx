@@ -7,6 +7,7 @@ import { ease, viewportOnce } from '@/lib/motion'
 import { usePrefersReducedMotion } from '@/lib/hooks'
 import TornEdge from '@/components/paper/TornEdge'
 import ConnectCTA from './ConnectCTA'
+import ContactForm from './ContactForm'
 
 /** Slower than the poster's marquee — this one is weather, not a headline. */
 const DRIFT = '58s'
@@ -54,7 +55,7 @@ export default function SiteFooter() {
   }
 
   return (
-    <footer id="contact" className="relative w-full" aria-label="Contact">
+    <footer id="contact" className="content-auto relative w-full" aria-label="Contact">
       <div className="relative overflow-hidden pb-[clamp(2.5rem,6vw,5rem)] pt-[clamp(4rem,11vw,9rem)]">
         {/* Behind everything, drifting. Same phase-stable CSS animation as the
             poster above — see `.marquee-track` in globals.css. */}
@@ -124,6 +125,11 @@ export default function SiteFooter() {
             </div>
           </motion.div>
         </motion.div>
+      </div>
+
+      {/* Contact form — reachable via the #send-message anchor */}
+      <div className="relative z-10 mx-auto max-w-[112rem] px-[max(1.5rem,7vw)] pb-[clamp(3rem,8vw,6rem)]">
+        <ContactForm />
       </div>
 
       {/* The page physically ends. */}

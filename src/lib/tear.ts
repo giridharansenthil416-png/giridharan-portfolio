@@ -176,8 +176,8 @@ export function tearMask({
     <svg xmlns='http://www.w3.org/2000/svg' width='${width}' height='${height}' viewBox='0 0 ${width} ${height}' preserveAspectRatio='none'>
       <defs>
         <filter id='f' x='-4%' y='-40%' width='108%' height='180%' color-interpolation-filters='sRGB'>
-          <feTurbulence type='fractalNoise' baseFrequency='0.028 0.6' numOctaves='4' seed='${seed}' result='n'/>
-          <feDisplacementMap in='SourceGraphic' in2='n' scale='7' xChannelSelector='R' yChannelSelector='G'/>
+          <feTurbulence type='fractalNoise' baseFrequency='0.028 0.6' numOctaves='2' seed='${seed}' result='n'/>
+          <feDisplacementMap in='SourceGraphic' in2='n' scale='6' xChannelSelector='R' yChannelSelector='G'/>
         </filter>
       </defs>
       <path d='${fillAbove(pts, width)}' fill='#fff' filter='url(#f)'/>

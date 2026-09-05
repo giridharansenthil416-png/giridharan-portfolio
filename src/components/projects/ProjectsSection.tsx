@@ -22,7 +22,7 @@ export default function ProjectsSection() {
   return (
     <section
       id="projects"
-      className="relative w-full py-[clamp(3.5rem,8vw,7rem)]"
+      className="content-auto relative w-full py-[clamp(3.5rem,8vw,7rem)]"
       aria-label={site.projects.heading}
     >
       <div className="relative z-10 mx-auto max-w-[112rem] px-[max(1.5rem,7vw)]">
@@ -32,7 +32,7 @@ export default function ProjectsSection() {
             <span className="eyebrow text-[0.75rem] font-bold text-signal">03 · PORTFOLIO WORK</span>
             <h2
               className="display m-0 mt-1 text-ink"
-              style={{ fontSize: 'clamp(2.4rem, 5vw, 5.5rem)', letterSpacing: '-0.035em' }}
+              style={{ fontSize: 'clamp(2.4rem, 5vw, 5.5rem)', letterSpacing: '-0.03em' }}
             >
               {site.projects.heading}
             </h2>
@@ -161,7 +161,7 @@ export default function ProjectsSection() {
                         className="h-full w-full object-cover object-top opacity-90 transition-all duration-300 group-hover/img:scale-105 group-hover/img:opacity-100"
                         loading="lazy"
                       />
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 backdrop-blur-[1px] transition-opacity duration-200 group-hover/img:opacity-100">
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/60 md:bg-black/40 opacity-0 md:backdrop-blur-[1px] transition-opacity duration-200 group-hover/img:opacity-100">
                         <span className="rounded-full bg-ink/90 px-3 py-1.5 font-mono text-[0.7rem] font-bold text-paper border border-white/20 shadow-lg">
                           🔍 Click to Expand Schematic ↗
                         </span>

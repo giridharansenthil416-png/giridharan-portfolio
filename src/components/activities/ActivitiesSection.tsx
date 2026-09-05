@@ -21,10 +21,11 @@ export default function ActivitiesSection() {
 
   return (
     <section
-      id="activities"
-      className="relative w-full py-[clamp(3rem,6vw,6rem)]"
+      id="highlights"
+      className="content-auto relative w-full py-[clamp(3rem,6vw,6rem)] scroll-mt-24"
       aria-label={site.activities.heading}
     >
+      <span id="activities" className="sr-only" aria-hidden="true" />
       <div className="relative z-10 mx-auto max-w-[112rem] px-[max(1.5rem,7vw)]">
         {/* Section Title */}
         <div className="mb-[clamp(1.8rem,4vw,3rem)] border-b border-ink/20 pb-3">
@@ -47,7 +48,7 @@ export default function ActivitiesSection() {
               whileInView="show"
               custom={idx}
               viewport={viewportOnce}
-              className="flex flex-col justify-between rounded-[0.6rem] border border-ink/15 bg-paper/70 p-6 backdrop-blur-[2px] transition-all duration-300 hover:border-ink/40 hover:bg-paper"
+              className="flex flex-col justify-between rounded-[0.6rem] border border-ink/15 bg-paper/85 md:bg-paper/70 p-6 md:backdrop-blur-[2px] transition-all duration-300 hover:border-ink/40 hover:bg-paper"
             >
               <div>
                 <div className="flex items-center justify-between gap-2 border-b border-ink/10 pb-2.5">

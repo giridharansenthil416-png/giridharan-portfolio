@@ -115,9 +115,12 @@ export function useElementPointer(ref: RefObject<HTMLElement | null>, enabled = 
     if (!el || !enabled) return
     if (!window.matchMedia('(pointer: fine)').matches) return
 
-    let rect = el.getBoundingClientRect()
+    let rect: DOMRect | null = null
     const measure = () => {
-      rect = el.getBoundingClientRect()
+      if (el) rect = el.getBoundingClientRect()
+    }
+    const invalidate = () => {
+      rect = null
     }
 
     let tx = 0
@@ -142,10 +145,12 @@ export function useElementPointer(ref: RefObject<HTMLElement | null>, enabled = 
     const clamp = (n: number) => Math.max(-1, Math.min(1, n))
 
     const onMove = (e: PointerEvent) => {
-      const mx = rect.left + rect.width / 2
-      const my = rect.top + rect.height / 2
-      tx = clamp((e.clientX - mx) / Math.max(rect.width * 0.95, 220))
-      ty = clamp((e.clientY - my) / Math.max(rect.height * 0.7, 220))
+      if (!rect) measure()
+      const r = rect!
+      const mx = r.left + r.width / 2
+      const my = r.top + r.height / 2
+      tx = clamp((e.clientX - mx) / Math.max(r.width * 0.95, 220))
+      ty = clamp((e.clientY - my) / Math.max(r.height * 0.7, 220))
       if (!running) {
         running = true
         frame = requestAnimationFrame(tick)
@@ -155,6 +160,7 @@ export function useElementPointer(ref: RefObject<HTMLElement | null>, enabled = 
     const onLeave = () => {
       tx = 0
       ty = 0
+      rect = null
       if (!running) {
         running = true
         frame = requestAnimationFrame(tick)
@@ -162,13 +168,15 @@ export function useElementPointer(ref: RefObject<HTMLElement | null>, enabled = 
     }
 
     window.addEventListener('pointermove', onMove, { passive: true })
-    window.addEventListener('resize', measure)
-    window.addEventListener('scroll', measure, { passive: true })
+    window.addEventListener('resize', invalidate, { passive: true })
+    // On scroll, simply invalidate rect so next pointer move reads it lazily,
+    // avoiding forced synchronous reflow (getBoundingClientRect) on every scroll frame.
+    window.addEventListener('scroll', invalidate, { passive: true })
     document.addEventListener('pointerleave', onLeave)
     return () => {
       window.removeEventListener('pointermove', onMove)
-      window.removeEventListener('resize', measure)
-      window.removeEventListener('scroll', measure)
+      window.removeEventListener('resize', invalidate)
+      window.removeEventListener('scroll', invalidate)
       document.removeEventListener('pointerleave', onLeave)
       cancelAnimationFrame(frame)
     }

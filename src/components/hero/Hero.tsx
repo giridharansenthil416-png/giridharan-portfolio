@@ -29,7 +29,8 @@ export default function Hero() {
   const hero = useRef<HTMLElement>(null)
 
   return (
-    <section ref={hero} className="relative min-h-svh w-full" aria-label="Cover">
+    <section id="home" ref={hero} className="relative min-h-svh w-full" aria-label="Cover">
+      <span id="hero" className="sr-only" aria-hidden="true" />
       <div className="relative z-10 flex min-h-svh w-full items-center justify-center px-[4vw]">
       <div
           style={{

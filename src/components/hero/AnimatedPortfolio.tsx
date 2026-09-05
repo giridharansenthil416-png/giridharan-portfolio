@@ -108,7 +108,7 @@ export default function AnimatedPortfolio({ word, faceIndex }: Props) {
           return (
             <motion.span
               key={i}
-              className="inline-block will-change-transform"
+              className="inline-block"
               initial={{ opacity: 0, y: '0.085em', scale: 1.04, rotate: wobble[i], filter: 'blur(7px)' }}
               /* Not a keyframe array under reduced motion: with initial={false}
                  Framer resolves a keyframe target to its FIRST value, which
